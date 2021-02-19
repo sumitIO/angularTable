@@ -1,0 +1,10 @@
+<div class='input-block'>
+  <mat-form-field class="example-form-field">
+  <mat-label>Enter URL:</mat-label>
+  <input matInput type="url" [(ngModel)]="userURL" #inputURL>
+  <button mat-button *ngIf="userURL" matSuffix mat-icon-button aria-label="Clear" (click)="userURL=''">
+    <mat-icon>close</mat-icon>
+  </button>
+  </mat-form-field>
+  <button mat-raised-button color='warn' (click)='makeRequest(inputURL.value)'>Show Data</button>
+</div>
