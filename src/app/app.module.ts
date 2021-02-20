@@ -14,6 +14,7 @@ import { MaterialModule } from './material/material.module';
 import { InputUrlComponent } from './components/input-url/input-url.component';
 import { TableDataSelectorComponent } from './components/table-data-selector/table-data-selector.component';
 import { ActionMenuComponent } from './components/action-menu/action-menu.component';
+import { TableComponent } from './components/table/table.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { ActionMenuComponent } from './components/action-menu/action-menu.compon
     InputUrlComponent,
     TableDataSelectorComponent,
     ActionMenuComponent,
+    TableComponent,
   ],
   imports: [
     BrowserModule,

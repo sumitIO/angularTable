@@ -1,33 +1,31 @@
-<div>
-  <!-- Preset API END POINT CALL TAB COMPONENT -->
-<app-table-data-selector [dataItem]='users' (emitData)=GET_API_END_POINT($event)></app-table-data-selector>
-<app-table-data-selector [dataItem]='todos' (emitData)=GET_API_END_POINT($event)></app-table-data-selector>
+<div class=app>
+  <!--
+    Preset API END POINT CALL TAB COMPONENT jsonplaceholder API call selectors
+    {usage:[dataItem]='"your_api_end_pint"'}-->
+  <!-- user -->
+  <app-table-data-selector
+    [dataItem]='"users"'
+    (emitData)=GET_API_END_POINT($event)>
+  </app-table-data-selector>
+  <!-- albums -->
+  <app-table-data-selector
+    [dataItem]='"albums"'
+    (emitData)=GET_API_END_POINT($event)>
+  </app-table-data-selector>
+  <!-- todos -->
+  <app-table-data-selector
+    [dataItem]='"todos"'
+    (emitData)=GET_API_END_POINT($event)>
+  </app-table-data-selector>
 
-<!-- Input URL Component -->
-<app-input-url (emitURL)='getUserURLData($event)'></app-input-url>
+  <!-- Component Required for user input API calls -->
+  <!-- Input URL Component -->
+  <app-input-url (emitURL)='GET_DATA_FROM_URL($event)'></app-input-url>
 
-<!-- Actual TABLE -->
-<table mat-table [dataSource]="dataRows" class="mat-elevation-z8" *ngIf="dataReceived">
-
-    <!-- CheckBox Column -->
-  <ng-container matColumnDef='inputChecked'>
-    <th mat-header-cell *matHeaderCellDef><mat-checkbox></mat-checkbox></th>
-    <td mat-cell *matCellDef='let element'><mat-checkbox (change)='isSelected($event,element)'></mat-checkbox></td>
-  </ng-container>
-
-  <!-- Data Columns -->
-  <ng-container *ngFor='let colName of dataColumns' matColumnDef={{colName}}>
-    <th mat-header-cell *matHeaderCellDef>{{colName | titlecase}}</th>
-    <td mat-cell  *matCellDef="let element">{{element[colName]}}</td>
-  </ng-container>
-
-  <!-- Action Menu Column -->
-  <ng-container matColumnDef='action'>
-    <th mat-header-cell *matHeaderCellDef><app-action-menu></app-action-menu></th>
-    <td mat-cell *matCellDef='let element'><app-action-menu [currRow]=element (emitAction)=actionCallRow($event)></app-action-menu></td>
-  </ng-container>
-
-  <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayColumns;"></tr>
-</table>
+  <!-- Actual TABLE -->
+  <app-table *ngIf='showTable'
+    [dataSource]='dataSource'
+    [dataColumns]='dataColumns'
+    [displayColumns]='displayColumns'>
+  </app-table>
 </div>

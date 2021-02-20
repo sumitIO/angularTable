@@ -8,16 +8,17 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 export class InputUrlComponent implements OnInit {
 
   // props
-  userURL?:string
+  userURL:string
   // data to app
   @Output() emitURL = new EventEmitter<string>();
   constructor() { }
 
   ngOnInit(): void {
+    console.log('[input-url Component] init')
   }
   makeRequest(value:string){
     this.emitURL.emit(value);
-    console.log('[makeRequest] emitURL to parent...');
+    console.log('[input-url Component] emitingURL to parent...');
   }
 
 }

@@ -1,0 +1,26 @@
+<div class='table-wrapper'>
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+      <!-- CheckBox Column -->
+    <ng-container matColumnDef='input'>
+      <th mat-header-cell *matHeaderCellDef><mat-checkbox></mat-checkbox></th>
+      <td mat-cell *matCellDef='let element'><mat-checkbox (change)='isSelected($event, element)'></mat-checkbox></td>
+    </ng-container>
+
+    <!-- Data Columns -->
+    <ng-container *ngFor='let colName of dataColumns' matColumnDef={{colName}}>
+      <th mat-header-cell *matHeaderCellDef>{{colName | titlecase}}</th>
+      <td mat-cell  *matCellDef="let element">{{element[colName]}}</td>
+    </ng-container>
+
+    <!-- Action Menu Column -->
+    <ng-container matColumnDef='action'>
+      <th mat-header-cell *matHeaderCellDef><app-action-menu></app-action-menu></th>
+      <td mat-cell *matCellDef='let element'><app-action-menu [currRow]=element (emitAction)=actionCallRow($event)></app-action-menu></td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayColumns;"></tr>
+  </table>
+  <mat-paginator></mat-paginator>
+</div>

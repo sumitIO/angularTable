@@ -1,6 +1,7 @@
-import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnInit } from '@angular/core';
-import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
+
+// TableService dependency injectio for handling client side Http requests
 import {TableService} from './services/table.service'
 
 @Component({
@@ -9,99 +10,66 @@ import {TableService} from './services/table.service'
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit{
+  // props
+  dataSource = new MatTableDataSource<any>();
+  dataColumns:string[]
+  displayColumns:string[]
+  showTable:boolean = false
+  
 
-  // data props
-  dataReceived:boolean = false;
-  // JSON data COLUMNS
-  dataColumns?:string[]
-
-  // EXTRA COLUMNS TO DISPLAY
-  displayColumns?: string[]
-  // JSON ROW DATA
-  dataRows?: any;
-
-  // default API calls props
-  users:string = 'users';
-  todos:string = 'todos';
-
-
-  constructor(private tableSerive:TableService) { }
+  constructor(private tableService:TableService) { }
 
   ngOnInit(): void{
-
+    console.log('[App] init')
   }
 
   GET_API_END_POINT(endpoint:string){
     console.log('[app]',endpoint)
     // Send request for data
-    this.tableSerive.getData_from_API_END_POINT(endpoint).subscribe(data =>{
-    // set true when data is received
-    this.dataReceived = true;
-    // set dataColumns names
-    this.dataColumns = Object.keys(data[0])
-    // set columns to display
-    this.displayColumns = ['inputChecked',...this.dataColumns,'action']
-    // set dataRow data
-    this.dataRows = data
+    this.tableService.getData_from_API_END_POINT(endpoint).subscribe(data =>{
+      // set dataColumns names
+      console.log('[app] dataReceived...')
+      // set columns to display
+      this.dataColumns = Object.keys(data[0])
+      // add inputCheckbox Col & action-menu Col
+      this.displayColumns = ['input',...this.dataColumns,'action']
+      // set dataSouce to data
+      this.dataSource = data
+      // if dataSource show Table else do not show it
+      this.dataSource ? this.showTable=true : this.showTable=false
+    },error=>{
+      alert(`ERROR OCCURED:\nErrorName: ${error.statusText}`)
+      console.log(error, error.ok)
     })
   }
-
-  getUserURLData(inputURL:string){
-    console.log('[Entered:URL]',inputURL)
-    this.tableSerive.getTableDatafromURL(inputURL).subscribe((res)=>{
-
-      console.log('[error]',res);
-      if(res.data.length===0){
-        alert('No data found @ res.data')
+  GET_DATA_FROM_URL(inputURL:string){
+    console.log('[app] Entered URL:',inputURL)
+    this.tableService.getTableDatafromURL(inputURL).subscribe((res)=>{
+      console.log('[app] data Received from URL...',res)
+      // if res contain data prop
+      if(res.data){
+        // set columns to display
+        this.dataColumns = Object.keys(res.data[0])
+        // add inputCheckbox Col & action-menu Col
+        this.displayColumns = ['input',...this.dataColumns,'action']
+        // set dataSouce to data
+        this.dataSource = res.data
       }
-      console.log('[data Received]...',res)
-      this.dataReceived = true;
-      this.dataColumns = Object.keys(res.data[0])
-      this.displayColumns = ['inputChecked',...this.dataColumns,'action']
-      this.dataRows = res.data
+      // if response Contain ony data no Metadeta
+      else if(res){{
+        // set columns to display
+        this.dataColumns = Object.keys(res[0])
+        // add inputCheckbox Col & action-menu Col
+        this.displayColumns = ['input',...this.dataColumns,'action']
+        // set dataSouce to data
+        this.dataSource = res
+
+      }}
+      // if dataSource show Table else do not show it
+      this.dataSource ? this.showTable=true : this.showTable=false
+    },error=>{
+      alert(`ERROR OCCURED:\nErrorType: ${error.name}\nError message: ${error.message}`);
+      console.error(error)
     })
-  }
-
-  isSelected(input:MatCheckboxChange, currRow:any){
-    // console.log(input.checked)
-    if(input.checked){
-    setTimeout(()=>{
-      alert(`[app]: userID:${currRow.id} userName:${currRow.name} is Selected`)
-    },500)
-  }
-
-  }
-  actionCallRow(d:any){
-    // alert(`${d.action}... for ${d.row.name}`)
-
-    if(d.action === 'redial'){
-      console.log(`[app]: Redialing... for ${d.row.name}`)
-
-      if(d.row.first_name && d.row.last_name){
-        alert(`[app]: redialing... for userID: ${d.row.id} userName: ${d.row.first_name} ${d.row.last_name}`)
-      }
-      else if(d.row.name){
-        alert(`[app]: redialing... for userID: ${d.row.id} name: ${d.row.name}`)
-      }
-      else{
-        alert(`[app]: redialing... for userID: ${d.row.id}`)
-
-      }
-    }
-    else if(d.action === 'disableAlert'){
-      console.log(`[app]: disableAlert for ${d.row.name}`)
-
-      if(d.row.first_name && d.row.last_name){
-        alert(`[app]: diabling alerts for userID: ${d.row.id} userName: ${d.row.first_name} ${d.row.last_name}`)
-      }
-
-      else if(d.row.name){
-        alert(`[app]: diabling alerts for userID: ${d.row.id} name: ${d.row.name}`)
-      }
-      else{
-        alert(`[app]: diabling alerts for userID: ${d.row.id}`)
-
-      }
-    }
   }
 }

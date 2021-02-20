@@ -6,6 +6,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox'
 import {MatMenuModule} from '@angular/material/menu';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
+import {MatPaginatorModule} from '@angular/material/paginator'
 
 
 const MaterialComponets = [
@@ -14,7 +15,8 @@ const MaterialComponets = [
   MatCheckboxModule,
   MatMenuModule,
   MatIconModule,
-  MatInputModule
+  MatInputModule,
+  MatPaginatorModule
 ]
 
 @NgModule({
